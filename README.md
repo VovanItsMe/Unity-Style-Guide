@@ -377,6 +377,7 @@ Class members should be alphabetized, and grouped into sections:
 * Public Methods
 * Private Methods
 * Nested types
+* Debug
 
 Within each of these groups order by access:
 * public
