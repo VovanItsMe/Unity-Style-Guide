@@ -1,79 +1,86 @@
 # Unity Style Guide
 
-This article contains ideas for setting up a projects structure and a naming convention for scripts and assets in Unity.
+Эта статья содержит то, какая структура, нейминг для скриптов и ассетов должны использоваться в структуре проекта Unity. 
 
 <a name="toc"></a>
-## Table of Contents
+## Содержание
 
-> 1. [Introduction](#introduction)
-> 1. [Project Structure](#structure)
-> 1. [Scripts](#scripts)
-> 1. [Asset Naming Conventions](#anc)
+> 1. [Вступление](#introduction)
+> 1. [Структура Проекта](#structure)
+> 1. [Скрипты](#scripts)
+> 1. [Правила Нейминга Ассетов И Назначение Лейблов](#anc)
 > 1. [Asset Workflows](#asset-workflows)
 
 <a name="introduction"></a>
-## 1. Introduction
+## 1. Вступление
 
-### Sections
+### Разделы
 
-> 1.1 [Style](#style)
+> 1.1 [Стиль](#style)
 
-> 1.2 [Important Terminology](#importantterminology)
+> 1.2 [Базовая Терминология](#importantterminology)
 
 <a name="style"></a>
-### 1.1 Style
+### 1.1 Стиль
 
-#### If your project already has a style guide, you should follow it.
-If you are working on a project or with a team that has a pre-existing style guide, it should be respected.  Any inconsistency between an existing style guide and this guide should defer to the existing.
+#### Если у вашей команды существует стайл гайд, вы должны ему следовать.
+Если Вы работаете над проектом, в команде, которая следует стайл гайду, Вы также должны ему следовать. Все несоответствия между вашим стилем и прописанным в гайде не должны существовать.
 
-Style guides should be living documents however and you should propose style guide changes to an existing style guide as well as this guide if you feel the change benefits all usages.
+Стайл гайд не является константой - он может быть изменён, при наличии непрописанных ситуаций, если это действительно необходимо.
 
-> ##### *Arguments over style are pointless. There should be a style guide, and you should follow it.*
+> ##### *Споры о стиле бессмысленны. Существует стайл гайд, и ты обязан ему следовать.*
 > [_Rebecca Murphey_](https://rmurphey.com)
 
-#### All structure, assets, and code in any project should look like a single person created it, no matter how many people contributed.
-Moving from one project to another should not cause a re-learning of style and structure. Conforming to a style guide removes unneeded guesswork and ambiguities.
+#### Вся структура, ассеты и код, должны выглядеть так, будто их создал один человек. Не важно сколько людей работали над ними.
+При переходе с одного проекта на другой, не должно быть различий в стиле и структуре.
 
-It also allows for more productive creation and maintenance as one does not need to think about style, simply follow instructions. This style guide is written with best practices in mind, meaning that by following this style guide you will also minimize hard to track issues.
+Соблюдение единого стиля устраняет хаос в структуре проекта.
 
-#### Friends do not let friends have bad style.
-If you see someone working either against a style guide or no style guide, try to correct them.
+Общий стиль позволяет без проблем поддерживать проект, не нужно думать о его новой структуре, просто следуй инструкциям. Этот стайл гайд написан с учётом всех известных проблем, так что, если они возникнут, их будет проще отследить.
 
-When working within a team or discussing within a community, it is far easier to help and to ask for help when people are consistent. Nobody likes to help untangle someone's spaghetti code or deal with assets with names they can't understand.
+#### Друзья, не позволяйте вашим друзьям вносить беспорядок в проект.
+Если Вы видите, что кто-то не следует стилю - поправьте их.
 
-If you are helping someone who's work conforms to a different but consistent and sane style guide, you should be able to adapt to it. If they do not conform to any style guide, please direct them here.
+При работе в команде, заметно легче помочь и попросить о помощи, когда люди объединены. Никому не нравится искать проблему там, где он видит только беспорядок.
+
+Если вы помогаете человеку, который следует, пусть и другому, но стилю - вам проще приспособиться к нему. Если же стиля нет - посоветуйте ему сначала поработать над ним.
+
 
 <a name="importantterminology"></a>
-### 1.2 Important Terminology
+### 1.2 Базовая Терминология
 
 <a name="terms-prefab"></a>
-#### Prefabs
-Unity uses the term Prefab for a system that allows you to create, configure, and store a GameObject complete with all its components, property values, and child GameObjects as a reusable Asset.
+#### Префабы
+Unity использует термин “Префаб” (“Prefab”) для системы, которая позволяет создавать, настраивать, и хранить “Игровой Объект” (“GameObject”), вместе со всеми компонентами, конкретными значениями, и дочерними “Игровыми Объектами”, как многоразового ассета, представляя, своего рода, контейнер.
+
+<a name="terms-label"></a>
+#### Лейблы
+Лейблы (“Label”) используются для упрощения поиска, однако давать лейбл нужно только префабам, потому как у них нет префикса.
 
 <a name="terms-level-map"></a>
-#### Levels/Maps/Scene
-Levels refer to what some people call maps or what Unity calls Scenes. A level contains a collection of objects.
+#### Уровни/Карты/Сцены
+В Unity существуют сцены, однако часто люди называют их уровнями или же картами. Простыми словами - сцены содержат в себе множества объектов.
 
 <a name="terms-serializable"></a>
 #### Serializable
-Variables that are Serializable are shown in the Inspector window in Unity. For more information see Unity's documentation on [Serializable](https://docs.unity3d.com/Manual/script-Serialization.html).
+Переменные, которые Serializable показываются в окне “Инспектора” (“Inspector”) в Unity. Больше информации вы найдёте в документации к Unity, в статье [Serializable](https://docs.unity3d.com/Manual/script-Serialization.html).
 
 <a name="terms-cases"></a>
 #### Cases
-There are a few different ways you can name things. Here are some common casing types:
+Существует несколько вариантов того, как вы можете называть вещи. Вот несколько примеров:
 
 > ##### PascalCase
-> Capitalize every word and remove all spaces, e.g. `DesertEagle`, `StyleGuide`, `ASeriesOfWords`.
+> Каждое слово пишется с заглавной буквы, без пробелов: `DesertEagle`, `StyleGuide`, `ASeriesOfWords`.
 > 
 > ##### camelCase
-> The first letter is always lowercase but every following word starts with uppercase, e.g. `desertEagle`, `styleGuide`, `aSeriesOfWords`.
+> Каждое слово пишется с заглавной буквой, но первое слово начинается с прописной: `desertEagle`, `styleGuide`, `aSeriesOfWords`.
 >  ##### lowercase
-> All letters are lowercase, e.g. `deserteagle`, 
+> Все буквы прописные - `deserteagle`, 
 >
 > ##### Snake_case
-> Words can arbitrarily start upper or lowercase but words are separated by an underscore, e.g. `desert_Eagle`, `Style_Guide`, `a_Series_of_Words`.
+> Слова могут начинаться как с заглавной, так и с прописной, однако слова разделяет нижнее подчёркивание: `desert_Eagle`, `Style_Guide`, `a_Series_of_Words`.
 
-**[⬆ Back to Top](#table-of-contents)**
+**[⬆ Вверх](#table-of-contents)**
 
 <a name="structure"></a>
 ## 2. Project Structure
