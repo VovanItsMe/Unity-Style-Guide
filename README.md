@@ -130,7 +130,7 @@ Assets
 (Содержит модели дронов с их текстурами и материалами)
 
 				Maps (Содержит оптимизированные и финализированные составные элементы отдельных карт)
-					RiverPort
+					City
 			General
 				Animations (Содержит анимационные клипы с анимационными контроллерами, как общие, так и для конкретных объектов)
 
@@ -157,7 +157,7 @@ Assets
 				Common
 				Ground
 				Industrial
-					RadioTower (Отдельные префабы)
+					Container (Отдельные префабы)
 						Complete (Собранные префабы)
 				Military
 				Nature
@@ -165,12 +165,12 @@ Assets
 			Gameplay 
 (Содержит объекты префабов, необходимые для работы игры)
 
-		Resources ()
+		Resources (Содержит загружаемые ресурсы, те что грузятся из кода)
 		Scenes 
 (Содержит сцены и файлы для их настройки, к примеру - профили постобработки)
 			BootScene (Сцена запуска и файлы к ней)
 			GameMaps (Игровые сцены и файлы к ним)
-				RiverPort
+				City
 			MTS ()
             Scripts
 
@@ -184,7 +184,7 @@ Assets
 		Scripts ()
     Plugins (Содержит сторонние пакеты, аддоны)
     ImportedAssets (Содержит сторонние файлы)
-    Resources (Содержит)
+    Resources (Содержит загружаемые ресурсы, те что грузятся из кода)
 </pre>
 
 Причины использования данной структуры описаны ниже, в подразделах.
@@ -258,107 +258,110 @@ PascalCase значит, что слова начинаются с заглав�
 
 
 <a name="2.2.2"></a>
-#### Reduce Migration Conflicts
-When working on multiple projects it is common for a team to copy assets from one project to another if they have made something useful for both. 
+#### Уменьшить Конфликты При Переиспользовании
+При работе над несколькими проектами, копирование различных ассетов из одного проекта в другой – обычное дело.
 
-By placing all project specific assets in a top level folder you reduce the chance of migration conflict when importing those assets into a new project.
+Во избежание проблем при переносе, хорошей практикой будет помещение всех импортных ассетов в папку уровнем выше (основная папка `“Assets”`).
 
 <a name="2.2.2e1"></a>
-##### Master Material Example
-For example, say you created a master material in one project that you would like to use in another project so you migrated that asset over. If this asset is not in a top level folder, it may have a name like `Assets/MaterialLibrary/M_Master`. If the target project doesn't have a master material already, this should work without issue.
+##### Пример Основного Материала
+Скажем, Вы создали материал, который хотите использовать в нескольких проектах сразу, вот, Вы скопировали его в другой проект. Можете не помещать его в корневую папку, если путь к нему выглядит так `“Assets/MaterialLibrary/M_Master”`. При условии, что в проекте, в который происходит перенос, не существует материала с таким названием. В этом случае проблемы не возникнут.
 
-As work on one or both projects progress their respective master materials may change to be tailored for their specific projects due to the course of normal development.
+В процессе работы, скопированные материалы могут изменяться под нужды конкретного проекта.
 
-The issue comes when, for example, an artist for one project created a nice generic modular set of static meshes and someone wants to include that set of static meshes in the second project. If the artist who created the assets used material instances based on `Assets/MaterialLibrary/M_Master` as they're instructed to, when a migration is performed there is a great chance of conflict for the previously migrated `Assets/MaterialLibrary/M_Master` asset.
+Однако проблемы могут возникнуть, когда необходимо будет перенести КОМПОЗИЦИЮ, состоящую из разных ассетов, в другой проект, при этом она будет использовать основной материал, к примеру, расположенный по пути `“Assets/MaterialLibrary/M_Master”`, если, как в случае, описанном выше, у нас находится по этому же пути изменённый материал, тогда в ассетах композиции будет использован изменённый материал, это и приведёт к дальнейшим проблемам.
 
-This issue can be hard to predict and hard to account for. The person migrating the static meshes may not be the same person who is familiar with the development of both project's master material, and they may not be even aware that the static meshes in question rely on material instances which then rely on the master material. The Migrate tool requires the entire chain of dependencies to work however, and so it will be forced to grab `Assets/MaterialLibrary/M_Master` when it copies these assets to the other project and it will overwrite the existing asset.
+Подобную проблему трудно предсказать и бывает трудно заметить, потому что тот, кто перемещает КОМПОЗИЦИЮ может быть не тем, кто её составлял и не знать, что они используют основной материал по тому же пути. The Migrate tool требуется вся цепочка зависимых ассетов, в свою очередь это требует перемещения материала по пути `"Assets/MaterialLibrary/M_Master"` при копировании, может получиться так, что он заменит существующие файлы проекта теми, которые он переносит.
 
-It is at this point where if the master materials for both projects are incompatible in _any way_, you risk breaking possibly the entire material library for a project as well as any other dependencies that may have already been migrated, simply because assets were not stored in a top level folder. The simple migration of static meshes now becomes a very ugly task.
+В случае, если скопированные материалы изменились, вы рискуете столкнуться с проблемами, в виде нарушения зависимостей ассетов, расположенных по тому же пути, что и в оригинальном проекте, из-за того, что перенесённые ассеты были распределены по всему проекту, вместо нахождения в отведённой для этого папки. Таким образом, казалось бы, банальное перемещение ПРЕФАБОВ моделей может стать очень проблемным занятием.
 
 <a name="2.2.3"></a>
-#### Samples, Templates, and 3rd Party Content Are Risk-Free
-An extension to [2.2.2](#2.2.2), if a team member decides to add sample content, template files, or assets they bought from a 3rd party, it is guaranteed that these new assets will not interfere with the project in any way unless your project's top level folder is not uniquely named.
+#### Тестовые Файлы, Шаблоны, и Сторонние Ассеты Безопасны
+Дополнение к [2.2.2](#2.2.2), если член команды добавил тестовые файлы, файлы шаблонов или сторонние ассеты, в большинстве случаев они не нарушат работу проекта, но только в случае, если имя корневой папки не было изменено.
 
-You can not trust 3rd party content to fully conform to the [top level folder rule](#2.2). There exist many assets that have the majority of their content in a top level folder but also have possibly modified Unity sample content as well as level files polluting the global `Assets` folder.
+Однако необязательно, чтобы сторонние ассеты следовали [правилу корневой папки](#2.2). Существует множество пакетов, большинство файлов которых расположено в корневой папке, но также возможно без проблем перенести их в основную папку проекта для освобождения корневой.
 
-When adhering to [2.2](#2.2), the worst 3rd party conflict you can have is if two 3rd party assets both have the same sample content. If all your assets are in a project specific folder, including sample content you may have moved into your folder, your project will never break.
+При соблюдении [2.2](#2.2), худший конфликт сторонних ассетов - если несколько пакетов имеют одинаковые тестовые файлы. Если все ваши ассеты находятся в папке проекта, включая тестовые файлы, их следует переместить в вашу папку в _Developers, такой подход поможет избежать подобных конфликтов.
 
-#### DLC, Sub-Projects, and Patches Are Easily Maintained
-If your project plans to release DLC or has multiple sub-projects associated with it that may either be migrated out or simply not cooked in a build, assets relating to these projects should have their own separate top level content folder. This make cooking DLC separate from main project content far easier. Sub-projects can also be migrated in and out with minimal effort. If you need to change a material of an asset or add some very specific asset override behavior in a patch, you can easily put these changes in a patch folder and work safely without the chance of breaking the core project.
+#### Дополнения, Подпроекты, и Патчи Легко Поддерживать
+Если предполагается разработка дополнений (DLC) к вашему проекту, или же с ним связано множество подпроектов которые будут перенесены или просто не добавлено в билд, относящиеся к ним ассеты должны находиться в корневой папке.
+Подобное отделение DLC значительно упрощает работу над проектом. Подпроекты также могут добавляться и удаляться без особых усилий.
+
+Если вам нужно изменить материал ассета или добавить какой-либо ассет, заменяющий другой, в патче, вы можете просто добавить его в папку для патча и продолжить работу, зная, что основной проект не повредится.
 
 <a name="2.3"></a>
 <a name="structure-developers"></a>
-### 2.3 Use Developers Folder For Local Testing
-During a project's development, it is very common for team members to have a sort of 'sandbox' where they can experiment freely without risking the core project. Because this work may be ongoing, these team members may wish to put their assets on a project's source control server. Not all teams require use of Developer folders, but ones that do use them often run into a common problem with assets submitted to source control.
+### 2.3 Используй Папку Разработчика Для Тестирования
+При разработке проекта, очень часто членам команды нужна тестовая площадка, которая не повредит основной проект.
+Поскольку работа ведётся непрерывно, эти разработчики могут захотеть запушить свои изменения. Не везде есть правило, что нужно использовать папку разработчика, однако без неё есть шанс получить конфликт при работе с гитом.
 
-It is very easy for a team member to accidentally use assets that are not ready for use which will cause issues once those assets are removed. For example, an artist may be iterating on a modular set of static meshes and still working on getting their sizing and grid snapping correct. If a world builder sees these assets in the main project folder, they might use them all over a level not knowing they could be subject to incredible change and/or removal. This causes massive amounts of re-working by everyone on the team to resolve.
+Как только работа над файлами будет завершена – разработчик просто переместит их в папку основного проекта.
 
-If these modular assets were placed in a Developer folder, the world builder should never of had a reason to use them and the whole issue would never happen.
-
-Once the assets are ready for use, an artist simply has to move the assets into the project specific folder. This is essentially 'promoting' the assets from experimental to production.
-
+После окончания работы над своей веткой и мёржде в develop, все данные из личной папки данного разработчика в папке _Developers должны быть удалены самим разработчиком, либо ревьюиром.
 
 <a name="levels"></a>
-### 2.4 All [Scene](#terms-level-map) Files Belong In A Folder Called Levels
-Level files are incredibly special and it is common for every project to have its own map naming system, especially if they work with sub-levels or streaming levels. No matter what system of map organization is in place for the specific project, all levels should belong in `Assets/ProjectNameName/Levels`.
+### 2.4 Все Файлы для [Сцены](#terms-level-map) Должны Находиться в Папке “Уровни”
+Файлы для уровней особенные и обычно для них в каждом проекте существует своя система нейминга, особенно, если идёт работа над подпроектами или `streaming levels`. Не имеет значения, какая система структуризации карт для каждого проекта, все уровни должны находиться по пути `"Assets/ProjectNameName/Levels"`.
 
-Being able to tell someone to open a specific map without having to explain where it is is a great time saver and general 'quality of life' improvement. It is common for levels to be within sub-folders of `Levels`, such as `Levels/Campaign1/` or `Levels/Arenas`, but the most important thing here is that they all exist within `Assets/ProjectNameName/Levels`.
+Возможность сказать кому-то открыть конкретную карту, без объяснения где она находится может сэкономить много времени, а также повысить “качество жизни”. Обычно для каждого уровня существуют подпапки в папке `"Levels"`, например `"Levels/Campaign1/"` или `"Levels/Arenas"`, но самая важное то, что все они находятся в единой папке `"Assets/ProjectNameName/Levels"`.
 
-This also simplifies the job of cooking for engineers. Wrangling levels for a build process can be extremely frustrating if they have to dig through arbitrary folders for them. If a team's levels are all in one place, it is much harder to accidentally not cook a map in a build. It also simplifies lighting build scripts as well QA processes.
+Это также способствует облегчению билда для инженеров. Поиск сцен может затянуться, если искать их по всему проекту. Если же все сцены находятся в одной папке “потерять” их при билде становится трудно. Это так же упрощает сборку освещения и QA processes.
 
 <a name="2.5"></a>
 <a name="structure-ownership"></a>
-### 2.5 Define Ownership
-In teams of more than one, define ownership of zone/assets/features. Some assets like scenes or prefabs do not handle simultaneous changes by multiple people very well, creating conflict. Having a single person who can change (or give the right to change) a given assets helps to avoid that problem.
+### 2.5 Разделение Ответственности
+В командах, где больше одного разработчика, стоит разделять ответственность по зонам/ассетам/функционалу. Некоторые ассеты вроде сцен и префабов не могут адекватно обработать изменения от нескольких людей, создавая конфликты.
+В таких случаях стоит назначить одного человека (или дать право на изменения), что позволит избежать подобных конфликтов.
 
 <a name="2.6"></a>
 <a name="structure-assettypes"></a>
-### 2.6 Do Not Create Folders Called `Assets` or `AssetTypes`
+### 2.6 Не Создавать Папки С Названием `Assets` или `AssetTypes`
 
 <a name="2.6.1"></a>
-#### Creating a folder named `Assets` is redundant.
-All assets are assets.
+#### Создание папки Assets излишне.
+Все ассеты - ассеты.
 
 <a name="2.6.2"></a>
 #### Creating a folder named `Meshes`, `Textures`, or `Materials` is redundant.
-All asset names are named with their asset type in mind. These folders offer only redundant information and the use of these folders can easily be replaced with the robust and easy to use filtering system the Content Browser provides.
+`All asset names are named with their asset type in mind. These folders offer only redundant information and the use of these folders can easily be replaced with the robust and easy to use filtering system the Content Browser provides.`
 
-Want to view only static mesh in `Environment/Rocks/`? Simply turn on the Static Mesh filter. If all assets are named correctly, they will also be sorted in alphabetical order regardless of prefixes. Want to view both static meshes and skeletal meshes? Simply turn on both filters. this eliminates the need to potentially have to `Control-Click` select two folders in the Content Browser's tree view.
+`Want to view only static mesh in `Environment/Rocks/`? Simply turn on the Static Mesh filter. If all assets are named correctly, they will also be sorted in alphabetical order regardless of prefixes. Want to view both static meshes and skeletal meshes? Simply turn on both filters. this eliminates the need to potentially have to `Control-Click` select two folders in the Content Browser's tree view.`
 
-> This also extends the full path name of an asset for very little benefit. The `SM_` prefix for a static mesh is only three characters, whereas `Meshes/` is seven characters.
+> `This also extends the full path name of an asset for very little benefit. The `SM_` prefix for a static mesh is only three characters, whereas `Meshes/` is seven characters.`
 
-Not doing this also prevents the inevitability of someone putting a static mesh or a texture in a `Materials` folder.
+`Not doing this also prevents the inevitability of someone putting a static mesh or a texture in a `Materials` folder`.
 
 <a name="2.7"></a>
 <a name="structure-large-sets"></a>
-### 2.7 Very Large Asset Sets Get Their Own Folder Layout
+### 2.7 Большие Композиции Должны Иметь Свои Папки
 
-This can be seen as a pseudo-exception to [2.6](#2.6).
+Это можно расценивать как псевдо-исключение из [2.6](#2.6).
 
-There are certain asset types that have a huge volume of related files where each asset has a unique purpose. The two most common are Animation and Audio assets. If you find yourself having 15+ of these assets that belong together, they should be together.
+Существует несколько типов ассетов, которые объединяют огромное количество файлов, при этом имея уникальное применение. Обычно это звуковые файлы и файлы анимации. Если в вашем проекте количество связанных файлов 15 и более, они должны быть вместе.
 
-For example, animations that are shared across multiple characters should lay in `Characters/Common/Animations` and may have sub-folders such as `Locomotion` or `Cinematic`.
+Например, анимационные клипы для нескольких персонажей должны находиться в `"Characters/Common/Animations"`, также могут быть подпапки Locomotion или Cinematic.
 
-> This does not apply to assets like textures and materials. It is common for a `Rocks` folder to have a large amount of textures if there are a large amount of rocks, however these textures are generally only related to a few specific rocks and should be named appropriately. Even if these textures are part of a [Material Library](#2.8).
+Это не применимо к таким файлам как текстуры и материалы. К примеру, папка Rocks содержит множество текстур при большом количестве моделей камней, однако разные текстуры принадлежат разным камням и должны иметь соответствующее название. Даже если эти текстуры находятся в [Библиотеке Материалов](#2.8).
 
 <a name="2.8"></a>
 <a name="structure-material-library"></a>
-### 2.8 `MaterialLibrary`
+### 2.8 `Библиотека Материалов`
 
-If your project makes use of master materials, layered materials, or any form of reusable materials or textures that do not belong to any subset of assets, these assets should be located in `Assets/ProjectName/MaterialLibrary`.
+Если в вашем проекте используются общие материалы, layered materials, или иные формы переиспользуемых материалов и текстур которые не принадлежат конкретным ассетам, они должны находиться в `"Assets/ProjectName/MaterialLibrary"`.
 
-This way all 'global' materials have a place to live and are easily located.
+Таким образом “глобальные” материалы будут иметь своё место, в котором их легко найти.
+Это также позволяет легко следовать указанию 'use material instances only' в проекте. Если все должны использовать material instances, тогда только обычные материалы должны находиться в этой папке. Вы можете легко отследить это искав только base материалы, не расположенные в `MaterialLibrary`.
 
-> This also makes it incredibly easy to enforce a 'use material instances only' policy within a project. If all artists and assets should be using material instances, then the only regular material assets that should exist are within this folder. You can easily verify this by searching for base materials in any folder that isn't the `MaterialLibrary`.
+`MaterialLibrary` не обязана содержать исключительно материалы. Shared utility textures, material functions, и другие файлы подобного назначения должны находиться в папках, отражающих их назначение. Например, generic noise textures должны находиться в `"MaterialLibrary/Utility"`.
 
-The `MaterialLibrary` doesn't have to consist of purely materials. Shared utility textures, material functions, and other things of this nature should be stored here as well within folders that designate their intended purpose. For example, generic noise textures should be located in `MaterialLibrary/Utility`.
-
-Any testing or debug materials should be within `MaterialLibrary/Debug`. This allows debug materials to be easily stripped from a project before shipping and makes it incredibly apparent if production assets are using them if reference errors are shown.
+Все тестовые материалы или материалы для дебага должны находиться в `"MaterialLibrary/Debug"`. Это позволяет быстро вырезать материалы для дебага из проекта перед переносом и делает ошибки более очевидными, если ассеты проекта используют их.
 
 <a name="2.9"></a>
 <a name="scene-structure"></a>
-## 2.9 Scene Structure
-Next to the project’s hierarchy, there’s also scene hierarchy. As before, we’ll present you a template. You can adjust it to your needs. Use named empty game objects as scene folders.
+## 2.9 Структура Сцены
+Уходя от иерархии проекта, переходим к иерархии сцены. Как и раньше, это лишь шаблон. Вы можете подстроить его под свои нужды.
+
+Используйте Пустые Объекты (Create Empty) как папки на сцене.
 
 <pre>
 Debug
@@ -375,36 +378,38 @@ Gameplay
 _Dynamic
 </pre>
 
- - All empty objects should be located at 0,0,0 with default rotation and scale.
- - For empty objects that are only containers for scripts, use “@” as prefix – e.g. @Cheats
- - When you’re instantiating an object in runtime, make sure to put it in _Dynamic – do not pollute the root of your hierarchy or you will find it difficult to navigate through it.
+-	У всех родительских объектов (пустых), должны быть координаты 0,0,0 со стандартными скейлом и вращением.
+-	Для пустых объектов, которые являются объектами для скриптов, используйте “@” как префикс – “@Cheats”
+-	Когда вы инициализируете объекты в runtime, убедитесь, что они находятся в _Dynamic – не забивайте основную иерархию, в противном случае вам будет трудно ориентироваться в ней.
 
-**[⬆ Back to Top](#table-of-contents)**
+
+**[⬆ Вверх](#table-of-contents)**
 
 <a name="scripts"></a>
 
-## 3. Scripts
+## 3. Скрипты
 
-This section will focus on C# classes and their internals. When possible, style rules conform to Microsoft's C# standard.
+Этот раздел будет сфокусирован на классах C# и их содержимом. Если это возможно, соблюдайте стиль, соответствующий стандартам Microsoft C#.
 
 ### Sections
-> 3.1 [Class Organization](#classorganization)
+> 3.1 [Организация Классов](#classorganization)
 
-> 3.2 [Compiling](#compiling)
+> 3.2 [Компиляция](#compiling)
 
-> 3.3 [Variables](#variables)
+> 3.3 [Переменные](#variables)
 
-> 3.4 [Functions](#functions)
+> 3.4 [Функции](#functions)
 
 <a name="classorganization"></a>
-### 3.1 Class Organization
-Source files should contain only one public type, although multiple internal classes are allowed.
+### 3.1 Организация Классов
+Файлы скриптов должны содержать только публичные типы, однако допустимы подклассы.
 
-Source files should be given the name of the public class in the file.
+Source файлы должны именоваться также как публичный класс.
 
-Organize namespaces with a clearly defined structure,
+Делайте организацию пространства имён с чёткой структурой,
 
-Class members should be alphabetized, and grouped into sections:
+Группы классов должны быть расположены в алфавитном порядке и сгруппированы по секторам:
+
 * Constant Fields
 * Static Fields
 * Fields
@@ -417,7 +422,7 @@ Class members should be alphabetized, and grouped into sections:
 * Nested types
 * Debug
 
-Within each of these groups order by access:
+Каждая из этих групп отсортирована по модификаторам доступа:
 * public
 * internal
 * protected
@@ -426,17 +431,17 @@ Within each of these groups order by access:
 namespace ProjectName
 {
 	/// <summary>  
-	/// Brief summary of what the class does
+	/// Краткое описание того, что делает класс
 	/// </summary>
     public class Account
     {
       #region Fields
       
-      [Tooltip("Public variables set in the Inspector, should have a Tooltip")]
+      [Tooltip("Публичные переменные устанавливаемые в Инспекторе, должны иметь Подсказку")]
       public static string BankName;
       
 	  /// <summary>  
-	  /// They should also have a summary
+	  /// Они также должны иметь описание
 	  /// </summary>
       public static decimal Reserves;
  
@@ -476,36 +481,37 @@ namespace ProjectName
 }
 ```
 
-#### Script Templates
-To save some time you can overwrite Unity's default script template with your own  to automatically setup the namespace and regions etc. See this Unity [support](https://support.unity3d.com/hc/en-us/articles/210223733-How-to-customize-Unity-script-templates) article to learn how.
+#### Шаблоны Скриптов
+Чтобы сэкономить немного времени можно переписать стандартный шаблон скриптов Unity своим собственным, для автоматической настройки пространств имён, регионов и тп. Изучите как это сделать в Unity [support](https://support.unity3d.com/hc/en-us/articles/210223733-How-to-customize-Unity-script-templates).
 
 <a name="namespace"></a>
 #### Namespace
-Use a namespace to ensure your scoping of classes/enum/interface/etc won't conflict with existing ones from other namespaces or the global namespace. The project should at minimum use the projects name for the Namespace to prevent conflicts with any imported Third Party assets.
+Используйте namespace чтобы убедиться, что обзор classes/enum/interface/etc не будет вступать в конфликты с существующими namespaces или global namespace.
+В проекте должно использоваться минимальное количество the projects name для Namespace чтобы избежать конфликтов со сторонними ассетами.
 
-#### All Public Functions Should Have A Summary
+#### Все Публичные Функции Должны Иметь Описание
 
-Simply, any function that has an access modifier of Public should have its summary filled out. 
+Всё просто – любая функция, имеющая модификатор доступа Public должна иметь описание.
 
 ```
 /// <summary>
-/// Fire a gun
+/// Стрельба из пистолета
 /// </summary>
 public void Fire()
 {
-// Fire the gun.
+// Выстрел из пистолета.
 }
 ```
 
 #### Foldout Groups
-If a class has only a small number of variables, Foldout Groups are not required.
+Если класс содержит небольшое количество переменных, Foldout Groups не обязательны.
 
-If a class has a moderate amount of variables (5-10), all [Serializable](#serializable) variables should have a non-default Foldout Group assigned. A common category is `Config`.
+При условии, что класс содержит много (5-10) переменных, все [Serializable](#serializable) переменные должны иметь нестандартные применённые Foldout Group. Обычно они относятся к категории `Config`.
 
-To create Foldout Groups there are 2 options in Unity. 
+Для того, чтобы создать Foldout Groups существует 2 способа в Unity. 
 
-* The first is to define a `[Serializable] public Class` inside the main class however this can have a performance impact. This allows the use of the same variable name to be shared.
-* The second option is to use the Foldout Group Attribute available with [Odin Inspector](https://odininspector.com/).
+* Первый - это определить `[Serializable] public Class` внутри главного класса, однако это может повлиять на производительность. Это позволит многократно использовать одно имя для переменной.
+* Второй вариант – это использовать Foldout Group Attribute доступный в [Odin Inspector](https://odininspector.com/).
 
 ```
 [[Serializable](https://docs.unity3d.com/ScriptReference/Serializable.html)]
@@ -518,69 +524,77 @@ public struct PlayerStats
 public int MovementSpeed = 1;
 ```
 
-#### Commenting
-Comments should be used to describe intention, algorithmic overview, and/or logical flow.
-It would be ideal if from reading the comments alone someone other than the author could understand a function’s intended behavior and general operation.
+#### Комментирование
+Комментарии должны описывать intention, algorithmic overview, и/или logical flow.
 
-While there are no minimum comment requirements and certainly some very small routines need no commenting at all, it is hoped that most routines will have comments reflecting the programmer’s intent and approach.
+В идеале, читая комментарии, любой должен понять, за что отвечает скрипт, а не только тот, кто его разрабатывал.
 
-##### Comment Style
-Place the comment on a separate line, not at the end of a line of code.
+Нет установленной длины комментария, очевидные и короткие методы не обязательно должны иметь комментарии, однако подавляющее большинство методов должно их иметь, чтобы отражать подход и намерения программиста.
 
-Begin comment text with an uppercase letter.
+##### Стиль комментариев
+Располагайте комментарии на отдельных строках, а не в конце строки после кода.
 
-End comment text with a period.
+Пишите комментарии начиная с заглавной буквы.
 
-Insert one space between the comment delimiter (//) and the comment text, as shown in the following example.
+В конце комментария ставится точка.
 
-The // (two slashes) style of comment tags should be used in most situations. Where ever possible, place comments above the code instead of beside it. Here are some examples:
+Ставьте пробел после (//) в тексте, как показано в примере.
+
+Подобный стиль комментария - // (две косые черты), должен использоваться в большинстве ситуаций. Где возможно – оставляйте комментарии над кодом, а не возле него.
+
+Пример:
+
 ```
-        // Sample comment above a variable.
+        // Простой комментарий над переменной.
         private int _myInt = 5;
 ```
 
-#### Regions
-The `#region` directive enables you to collapse and hide sections of code in C# files. The ability to hide code selectively makes your files more manageable and easier to read. 
+#### Регионы
+Регионы `“#region”` позволяют сворачивать отмеченные ими части кода в скриптах C#. Возможность сворачивать части кода выборочно делает его удобнее и читаемее.
+
+Пример:
+
 ```
 #region "This is the code to be collapsed"
     Private components As System.ComponentModel.Container
 #endregion
 ```
 
-#### Spacing
-Do use a single space after a comma between function arguments.
+#### Промежутки
+Ставьте пробел после запятой, при перечислении аргументов.
 
 Example: `Console.In.Read(myChar, 0, 1);`
-* Do not use a space after the parenthesis and function arguments.
-* Do not use spaces between a function name and parenthesis.
-* Do not use spaces inside brackets.
+* Не ставьте пробел после скобок и аргументов функции.
+* Не ставьте пробел между названием функции и скобкой.
+* Не ставьте пробел в скобках (квадратных). 
+
 <a name="3.1"></a>
 <a name="compiling"></a>
-### 3.2 Compiling
-All scripts should compile with zero warnings and zero errors. You should fix script warnings and errors immediately as they can quickly cascade into very scary unexpected behavior.
+### 3.2 Компиляция
+Все скрипты должны быть скомпилированы без предупреждений и ошибок. При возникновении подобных, их необходимо скорее исправить, потому как могут возыметь непредвиденные и серьёзные последствия.
 
-Do *not* submit broken scripts to source control. If you must store them on source control, shelve them instead.
+*Ни в коем случае* **нельзя** пушить скрипты с ошибками.
 
-### 3.3 Variables
-The words `variable` and `property` may be used interchangeably.
+### 3.3 Переменные
+Слова `переменная` и `свойство` для вас должны означать одно и то же и быть взаимозаменяемыми. 
 
-#### Variable Naming
+#### Названия Переменных
 
 ##### Nouns
-All non-boolean variable names must be clear, unambiguous, and descriptive nouns. 
+Все небулевые переменные должны быть понятным, однозначными и быть существительными.
 
 ##### Case
-All variables use PascalCase unless marked as [private](#privatevariables) which use camelCase. 
+Все переменные должны использовать PascalCase, кроме [private](#privatevariables), использующие camelCase. 
 
-Use PascalCase for abbreviations of 4 characters or more (3 chars are both uppercase).
+Используй PascalCase для аббревиатур из 4-х или более букв (из 3-х символов 2 заглавные).
 
 ##### Considered Context
-All variable names must not be redundant with their context as all variable references in the class will always have context.
+Все переменные должны иметь название, сопоставимое с их предназначением.
 
-###### Considered Context Examples:
-Consider a Class called `PlayerCharacter`.
+###### Примеры Considered Context:
+Возьмём класс `PlayerCharacter`.
 
-**Bad**
+**Плохо**
 
 * `PlayerScore`
 * `PlayerKills`
@@ -589,9 +603,9 @@ Consider a Class called `PlayerCharacter`.
 * `CharacterSkills`
 * `ChosenCharacterSkin`
 
-All of these variables are named redundantly. It is implied that the variable is representative of the `PlayerCharacter` it belongs to because it is `PlayerCharacter` that is defining these variables.
+Все переменные имеют излишне длинное название. Подразумевается, что они относятся к классу `PlayerCharacter`, однако класс, в котором они находятся и есть `PlayerCharacter`.
 
-**Good**
+**Хорошо**
 
 * `Score`
 * `Kills`
@@ -600,27 +614,36 @@ All of these variables are named redundantly. It is implied that the variable is
 * `Skills`
 * `Skin`
 
-#### Variable Access Level
-In C#, variables have a concept of access level. Public means any code outside the class can access the variable. Protected means only the class and any child classes can access this variable internally. Private means only this class and no child classes can access this variable.
-Variables should only be made public if necessary.
+#### Уровень Доступа к Переменным
+В C# у переменных есть модификатор доступа.
 
-Prefer to use the attribute `[SerializeField]` instead of making a variable public.
+Public означает, что к данной переменной можно получить доступ вне скрипта (или класса).
 
-##### Local Variables
-Local variables should use camelCase.
+Protected означает, что только дочерние классы и сам класс имеет доступ к переменной.
 
-###### Implicitly Typed Local Variables
-Use implicit typing for local variables when the type of the variable is obvious from the right side of the assignment, or when the precise type is not important.
+Private означает, что переменная доступна исключительно для этого класса.
+
+Переменные должны быть публичными **только в случае необходимости**.
+
+Лучше использовать `[SerializeField]`, вместо обозначения её Public.
+
+##### Локальные Переменные
+Локальные переменные должны именоваться по camelCase.
+
+###### Неявное Типизирование Локальных Переменных
+Используйте скрытые типы для локальных переменных если тип переменной явно виден из её значения по правую сторону равенства, или когда точный тип не важен.
+
 ```
-var var1 = "This is clearly a string.";
+var var1 = "Очевидно, это string.";
 var var2 = 27;
 var var3 = Convert.ToInt32(Console.ReadLine());
 // Also used in for loops
 for (var i = 0; i < bountyHunterFleets.Length; ++i) {};
 ```
 
-Do not use var when the type is not apparent from the right side of the assignment.
-Example
+Не используйте var, если тип не очевиден из значения переменной.
+Пример:
+
 ```
 int var4 = ExampleClass.ResultSoFar();
 ```
