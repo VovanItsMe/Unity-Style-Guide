@@ -83,148 +83,179 @@ Unity использует термин “Префаб” (“Prefab”) для
 **[⬆ Вверх](#table-of-contents)**
 
 <a name="structure"></a>
-## 2. Project Structure
-The directory structure style of a project should be considered law. Asset naming conventions and content directory structure go hand in hand, and a violation of either causes unneeded chaos.
+## 2. Структура проекта
+Стиль структуры проекта должен считаться законом. Нейминг ассетов и папок должны соответствовать друг другу, несоответствие хотя бы одного элемента может привести к беспорядку “на ровном месте”.
 
-In this style, we will be using a structure that relies more on filtering and search abilities of the Project Window for those working with assets to find assets of a specific type instead of another common structure that groups asset types with folders.
+Данный стиль и структура оптимизированы как для простого перемещения между папок, так и для поиска в окне “Проекта” (“Project”), подобный формат имеет преимущества над стилями, использующими иную структуру и нейминг.
 
-> Using a prefix [naming convention](#asset-name-modifiers), using folders to contain assets of similar types such as `Meshes`, `Textures`, and `Materials` is a redundant practice as asset types are already both sorted by prefix as well as able to be filtered in the content browser.
+> Использование префикса [правил нейминга](#asset-name-modifiers), хранение в папках однотипных ассетов как: `Меши`, `Текстуры`, и `Материалы` – является излишним поскольку типы ассетов уже отсортированы по префиксу и могут быть отфильтрованы в поиске.
 <pre>
+	Структура проекта должна выглядеть подобным образом:
 Assets
-    <a name="#structure-developers">_Developers</a>(Use a `_`to keep this folder at the top)
-        DeveloperName
-            (Work in progress assets)
-    <a name="structure-top-level">ProjectName</a>
-            Characters
-            	Anakin
-            FX
-                Vehicles
-                    Abilities
-                        IonCannon
-                            (Particle Systems, Textures)
-                Weapons
-            Gameplay
-                Characters
-                Equipment
-                Input
-                Vehicles
-                    Abilities
-                    Air
-                        TieFighter
-                            (Models, Textures, Materials, Prefabs)
-            <a name="#structure-levels">_Levels</a>
-                Frontend
-                Act1
-                    Level1
-            Lighting
-                HDRI
-                Lut
-                Textures
-            MaterialLibrary
-            	Debug
-            	Shaders
-            Objects
-                Architecture (Single use big objects)
-                    DeathStar
-                Props (Repeating objects to fill a level)
-                    ObjectSets
-                        DeathStar
+    _Developers (Использование `_` помещает файл вверх)
+        DeveloperName (Личная папка разработчика, в ней содержатся тестовые ассеты, которые не попадут в финальный проект и будут удалены при мёрдже)
+    ProjectName (Основная папка проекта)
+		GameModes (Содержит файлы для игровых режимов)
+            	Objects (Содержит модели с текстурами и материалами, бесшовные текстуры с материалами, анимационные контроллеры и анимационные клипы, карты высот для построения террейнов, оптимизированные и финализированные составные элементы отдельных карт)
+                	Environment 
+(Содержит модели с текстурами и материалами)
+
+				Architecture (Содержит большие постройки)
+					Buildings (Содержит здания)
+						Hangar
+							Materials
+							Textures
+				Common (Содержит модели окружения)
+					Big 
+			(Большие, по типу: бочек, заборов, фонарей и тп.)
+
+					Small 
+			(Маленькие, по типу: коробок, мусорных пакетов и тп.)
+
+				Ground (Содержит файлы разметки, трещин и тп.)
+				Industrial (Содержит большие модели окружения, относящиеся к индустриализации, по типу: портовые и строительные краны, большие цистерны с топливом, электроопоры, вышки, морские контейнеры и тп.)
+
+				Military (Содержит модели, относящиеся к оборонительным сооружениям, военной технике и тп.)
+
+				Nature (Содержит объекты природного происхождения, по типу: травы, деревьев, кустов, камней и тп.)
+
+				Transport (Содержит транспорт)
+					Aircraft (Воздушный)
+					Cars (Наземный)
+					Ships (Водный)
+			Gameplay 
+(Содержит объекты для геймплея)
+
+				Drones 
+(Содержит модели дронов с их текстурами и материалами)
+
+				Maps (Содержит оптимизированные и финализированные составные элементы отдельных карт)
+					RiverPort
+			General
+				Animations (Содержит анимационные клипы с анимационными контроллерами, как общие, так и для конкретных объектов)
+
+				MapHeightmaps 
+(Содержит карты высот для построения террейнов)
+
+				SeamlessMaterials 
+(Содержит бесшовные материалы с их текстурами)
+
+		Prefabs 
+(Содержит файлы префабов, та же иерархия папок, как и в папках объектов)
+
+			CompositionPrefabs (Содержит трафареты для построения шаблонных локаций и сборные композиции, часто применяемые на сценах)
+
+				Architecture
+				Common
+				Ground
+				Industrial
+				Military
+				Nature
+				Transport
+			Environment (Содержит отдельные и собранные префабы)
+				Architecture
+				Common
+				Ground
+				Industrial
+					RadioTower (Отдельные префабы)
+						Complete (Собранные префабы)
+				Military
+				Nature
+				Transport
+			Gameplay 
+(Содержит объекты префабов, необходимые для работы игры)
+
+		Resources ()
+		Scenes 
+(Содержит сцены и файлы для их настройки, к примеру - профили постобработки)
+			BootScene (Сцена запуска и файлы к ней)
+			GameMaps (Игровые сцены и файлы к ним)
+				RiverPort
+			MTS ()
             Scripts
-                AI
-                Gameplay
-                    Input
-                Tools
+
             Sound
-                Characters
-                Vehicles
-                    TieFighter
-                        Abilities
-                            Afterburners
-                Weapons
-            UI
-                Art
-                    Buttons
-                Resources
-                    Fonts
-    ExpansionPack (DLC)
-    Plugins
-    ThirdPartySDK  
+
+            UI (Содержит файлы элементов интерфейса и файлы для его работы)
+		Fonts (Файлы шрифтов)
+		Image ()
+		Materials ()
+		Prefabs ()
+		Scripts ()
+    Plugins (Содержит сторонние пакеты, аддоны)
+    ImportedAssets (Содержит сторонние файлы)
+    Resources (Содержит)
 </pre>
 
+Причины использования данной структуры описаны ниже, в подразделах.
 
+### Подразделы
 
+> 2.1 [Названия Папок](#structure-folder-names)
 
-The reasons for this structure are listed in the following sub-sections.
+> 2.2 [Корневая Папка](#structure-top-level)
 
-### Sections
+> 2.3 [Личные Папки Разработчиков](#structure-developers)
 
-> 2.1 [Folder Names](#structure-folder-names)
+> 2.4 [Сцены](#levels)
 
-> 2.2 [Top-Level Folders](#structure-top-level)
+> 2.5 [Разделение Ответственности](#structure-ownership)
 
-> 2.3 [Developer Folders](#structure-developers)
+> 2.6 [`Assets` или `AssetTypes`](#structure-assettypes)
 
-> 2.4 [Levels](#levels)
+> 2.7 [Большие Композиции Должны Иметь Свои Папки](#structure-large-sets)
 
-> 2.5 [Define Ownership](#structure-ownership)
+> 2.8 [Библиотека Материалов](#structure-material-library)
 
-> 2.6 [`Assets` and `AssetTypes`](#structure-assettypes)
-
-> 2.7 [Large Sets](#structure-large-sets)
-
-> 2.8 [Material Library](#structure-material-library)
-
-> 2.9 [Scene Structure](#scene-structure)
+> 2.9 [Структура Сцены](#scene-structure)
 
 
 <a name="2.1"></a>
 <a name="structure-folder-names"><a>
-### 2.1 Folder Names
-These are common rules for naming any folder in the content structure.
+### 2.1 Наименования папок
+Базовые правила наименования папок в структуре проекта.
 
 <a name="2.1.1"></a>
-#### Always Use [PascalCase](#terms-cases)
-PascalCase refers to starting a name with a capital letter and then instead of using spaces, every following word also starts with a capital letter. For example, `DesertEagle`, `RocketPistol`, and `ASeriesOfWords`.
+#### Обязательный стиль названия - [PascalCase](#terms-cases)
+PascalCase значит, что слова начинаются с заглавной буквы и не имеют пробела между друг другом. Пример: `DesertEagle`, `RocketPistol` и `ASeriesOfWords`.
 
 <a name="2.1.2"></a>
-#### Never Use Spaces
-Re-enforcing [2.1.1](#2.1.1), never use spaces. Spaces can cause various engineering tools and batch processes to fail. Ideally your project's root also contains no spaces and is located somewhere such as `D:\Project` instead of `C:\Users\My Name\My Documents\Unity Projects`.
+#### Никогда Не Используй Пробелы
+Дополнение [2.1.1](#2.1.1), никогда не используй пробелы. Пробелы могут создавать проблемы для различных инструментов и процессов. В идеале путь к вашему проекту на компьютере должен выглядеть так `“D:\Project”`, вместо `“C:\Users\My Name\My Documents\Unity Projects”`.
 
 <a name="2.1.3"></a>
-#### Never Use Unicode Characters And Other Symbols
-If one of your game characters is named 'Zoë', its folder name should be `Zoe`. Unicode characters can be worse than [Spaces](#2.1.2) for engineering tools and some parts applications don't support Unicode characters in paths either.
+#### Никогда Не Используй Специальные Символы И Знаки Unicode
+примеру, в вашем проекте имеется персонаж с именем 'Zoë', значит его файл должен называться “Zoe”. Символы Unicode могут создать даже больше проблем чем [Пробелы](#2.1.2) потому как для некоторых инструментов и частей программ могут не поддерживаться символы Unicode в пути к файлам.
 
-Related to this, if your project has and your computer's user name has a Unicode character (i.e. your name is `Zoë`), any project located in your `My Documents` folder will suffer from this issue. Often simply moving your project to something like `D:\Project` will fix these mysterious issues.
+К слову, если имя пользователя на вашем пк содержит символы Unicode (т.е. имя пользователя `“Zoë”`), любой проект, находящийся в папке `“My Documents”` будет страдать от этой проблемы. Обычно перемещение в корневую папку диска, к примеру `“D:\Project”` может исправить связанные с этим проблемы.
 
-Using other characters outside `a-z`, `A-Z`, and `0-9` such as `@`, `-`, `_`, `,`, `*`, and `#` can also lead to unexpected and hard to track issues on other platforms, source control, and weaker engineering tools. 
+Использование спец. символов по типу: `a-z`, `A-Z`, и `0-9` а также `@, -, _, ,, *`, и `#` таким же образом может повлечь за собой: труднодиагностируемые проблемы на других платформах, контроль версий, некорректную работу различных инструментов и тд.
 
 <a name="structure-no-empty-folders"></a>
-#### No Empty Folders
-There simply shouldn't be any empty folders. They clutter the content browser.
-
-If you find that the content browser has an empty folder you can't delete, you should perform the following:
-1. Be sure you're using source control.
-1. Navigate to the folder on-disk and delete the assets inside.
-1. Close the editor.
-1. Make sure your source control state is in sync (i.e. if using Perforce, run a Reconcile Offline Work on your content directory)
-1. Open the editor. Confirm everything still works as expected. If it doesn't, revert, figure out what went wrong, and try again.
-1. Ensure the folder is now gone.
-1. Submit changes to source control.
+#### НЕТ Пустым Папкам
+В проекте не должно быть пустых папок. Они мешают при поиске.
+Если же вы нашли пустую папку, нельзя просто так взять и удалить её, сначала нужно убедиться в следующем:
+1.	Убедитесь, что вы на актуальной версии ветки.
+2.	Спросите у своих коллег, необходима ли им эта папка.
+3.	Откройте папку через проводник для проверки скрытых файлов и удалите их.
+4.	Перейдите в проект и убедитесь, что его работа не нарушена.
+5.	Убедитесь, что папка удалена.
+6.	Закоммитьте внесённые изменения.
 
 <a name="2.2"></a>
 <a name="structure-top-level"><a>
-### 2.2 Use A Top Level Folder For Project Specific Assets
-All of a project's assets should exist in a folder named after the project. For example, if your project is named 'Generic Shooter', _all_ of it's content should exist in `Assets/GenericShooter`.
+### 2.2 Используйте Корневую Папку Только Для Особых Ассетов
+Все ассеты проекта должны находиться в папках, находящихся внутри папки с названием проекта. К примеру, ваш проект называется 'Generic Shooter', всё его содержимое находится по пути “Assets/GenericShooter”.
+Папка “Developers” нужна, для вашей личной папки, в которой могут содержаться ваши файлы, для, например, тестирования. Смотрите [Папки Разработчиков](#2.3) для более детальной информации.
 
-> The `Developers` folder is not for assets that your project relies on and therefore is not project specific. See [Developer Folders](#2.3) for details about this.
-
-There are multiple reasons for this approach.
+Существует множество причин, по которым необходима такая структура.
 
 <a name="2.2.1"></a>
-#### No Global Assets
-Often in code style guides it is written that you should not pollute the global namespace and this follows the same principle. When assets are allowed to exist outside of a project folder it often becomes much harder to enforce a strict structure layout as assets not in a folder encourages the bad behavior of not having to organize assets.
+#### НЕТ Глобальным Ассетам
+Довольно часто в код стайл гайдах написано, что не следует использовать без особых причин глобальные пространства имён, ровно по тем же причинам. В случае, когда ассеты находятся в корневой папке, они не следуют общему стилю, а это обязательно приводит к хаосу, потому как нет нужды распределять ассеты должным образом.
 
-Every asset should have a purpose, otherwise it does not belong in a project. If an asset is an experimental test and shouldn't be used by the project it should be put in a [`Developer`](#2.3) folder.
+У каждого ассета должно быть своё предназначение, иначе он не должен находиться в проекте. Если ассет предназначен для тестирования и не будет, в дальнейшем, использован с проекте, он должен находиться в вашей личной папке, в папке [Developers](#2.3).
+
 
 <a name="2.2.2"></a>
 #### Reduce Migration Conflicts
