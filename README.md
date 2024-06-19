@@ -806,11 +806,11 @@ public WeaponType Weapon
 * `Visibility` - Оно видимо? Изменение видимости? Описание условий полета?
 
 #### Обработчики событий и диспетчеры Должны начинаться с `On`
-Название любой функции, которая обрабатывает или отправляет событие, должна начинаться с `“On”` и продолжать следовать  [правилу глагола](#function-verbrule).
+Название любой функции, которая обрабатывает или отправляет событие, должна начинаться с `“On”` и продолжать следовать [правилу глагола](#function-verbrule).
 
 Хорошие примеры:
 
-* `OnDeath` - Common collocation in games
+* `OnDeath` - Распространённое словосочетание в играх
 * `OnPickup`
 * `OnReceiveMessage`
 * `OnMessageRecieved`
@@ -818,46 +818,45 @@ public WeaponType Weapon
 * `OnClick`
 * `OnLeave`
 
-Bad examples:
+Плохие примеры:
 
 * `OnData`
 * `OnTarget`
 
-**[⬆ Back to Top](#table-of-contents)**
+**[⬆ Вверх](#table-of-contents)**
 <a name="anc"></a>
 <a name="4"></a>
 
-## 4. Asset Naming Conventions
-Naming conventions should be treated as law. A project that conforms to a naming convention is able to have its assets managed, searched, parsed, and maintained with incredible ease.
+## 4. Правила Нейминга Ассетов и Назначение Лейблов
+Правила нейминга должны трактоваться как закон. В проекте, в котором действуют правила нейминга, ассеты с лёгкостью можно найти и управлять ими.
 
-Most things are prefixed with the prefix generally being an acronym of the asset type followed by an underscore.
+Большинство ассетов имеют префикс, обычно представляющий собой аббревиатуру соответствующего файлу типа, за которой следует подчеркивание.
 
-**Assets use [PascalCase](#cases)**
+**Найминг Ассетов с [PascalCase](#cases)**
 
 <a name="base-asset-name"></a>
 <a name="4.1"></a>
-### 4.1 Base Asset Name - `Prefix_BaseAssetName_Variant_Suffix`
-All assets should have a _Base Asset Name_. A Base Asset Name represents a logical grouping of related assets. Any asset that is part of this logical group 
-should follow the the standard of  `Prefix_BaseAssetName_Variant_Suffix`.
+### 4.1 Шаблон Нейминга Ассета - `Prefix_BaseAssetName_Variant_Suffix`
+Все ассеты должны иметь *Базовое* Имя. Базовое имя показывает к какой логической группе относится ассет. Любой ассет, являющийся частью логической группы должен именоваться по шаблону `Prefix_BaseAssetName_Variant_Suffix`.
 
-Keeping the pattern `Prefix_BaseAssetName_Variant_Suffix` in mind and using common sense is generally enough to warrant good asset names. Here are some detailed rules regarding each element.
+Использование паттерна `Prefix_BaseAssetName_Variant_Suffix` и здравого смысла обычно хватает для написания хороших названий ассетов.
+Вот несколько подробных правил относительно каждого элемента: `Prefix` и `Suffix` определяются типом ассета, следуя таблице [Asset Name Modifier](#asset-name-modifiers).
 
-`Prefix` and `Suffix` are to be determined by the asset type through the following [Asset Name Modifier](#asset-name-modifiers) tables.
+`BaseAssetName` должно быть сокращённым и понятным именем в зависимости от типа ассета, относящее его к соответствующей группе. К примеру, если у вас есть персонаж с именем Боб, все ассеты связанные с Бобом, будут иметь `BaseAssetName` как `Bob`.
 
-`BaseAssetName` should be determined by short and easily recognizable name related to the context of this group of assets. For example, if you had a character named Bob, all of Bob's assets would have the `BaseAssetName` of `Bob`.
+Для уникальных и особых вариаций ассетов, `Variant` – это короткое и узнаваемое название, отражающее логическую группу ассета и относящее к основному ассету. К примеру, если у Боба много одежды, эта одежда должна использовать `Bob` как `BaseAssetName`, но и включать узнаваемое `Variant`. Как 'Злобную' одежду, можно назвать `Bob_Evil` так и 'Ретро' одежду можно назвать `Bob_Retro`.
 
-For unique and specific variations of assets, `Variant` is either a short and easily recognizable name that represents logical grouping of assets that are a subset of an asset's base name. For example, if Bob had multiple skins these skins should still use `Bob` as the `BaseAssetName` but include a recognizable `Variant`. An 'Evil' skin would be referred to as `Bob_Evil` and a 'Retro' skin would be referred to as `Bob_Retro`.
+Для уникальных, но общих вариаций ассетов, `Variant` это две цифры `01`. Например, если ваш художник по окружению сгенерировал камни, предположим, одного размера, они должны называться `Rock_01`, `Rock_02`, `Rock_03` и тд. Никогда не следует использовать трёхзначный номер вариации за редким исключением. Если у вас более 100 вариаций ассета, вам следует рассмотреть возможность организации их с разными базовыми именами или использованием нескольких вариантов имен.
 
-For unique but generic variations of assets, `Variant` is a two digit number starting at `01`. For example, if you have an environment artist generating nondescript rocks, they would be named `Rock_01`, `Rock_02`, `Rock_03`, etc. Except for rare exceptions, you should never require a three digit variant number. If you have more than 100 assets, you should consider organizing them with different base names or using multiple variant names.
+В зависимости от того, каким образом были сделаны ваши ассеты, вы можете объединить их имена. Например, вы создали ассеты пола для Arch Viz project, значит вы называете их `Flooring` с соответствующими вариантами: `Flooring_Marble_01`, `Flooring_Maple_01`, `Flooring_Tile_Squares_01`.
 
-Depending on how your asset variants are made, you can chain together variant names. For example, if you are creating flooring assets for an Arch Viz project you should use the base name `Flooring` with chained variants such as `Flooring_Marble_01`, `Flooring_Maple_01`, `Flooring_Tile_Squares_01`.
 
 <a name="1.1-examples"></a>
-#### Examples
+#### Примеры
 
-##### Character
+##### Персонажи
 
-| Asset Type               | Asset Name   |
+| Тип Ассета               | Название Ассета   |
 | ------------------------ | ------------ |
 | Skeletal Mesh            | SK_Bob       |
 | Material                 | M_Bob        |
@@ -865,9 +864,9 @@ Depending on how your asset variants are made, you can chain together variant na
 | Texture (Normal)         | T_Bob_N      |
 | Texture (Evil Diffuse)   | T_Bob_Evil_D |
 
-##### Prop
+##### Объекты окружения
 
-| Asset Type               | Asset Name   |
+| Тип Ассета               | Название Ассета   |
 | ------------------------ | ------------ |
 | Static Mesh (01)         | SM_Rock_01   |
 | Static Mesh (02)         | SM_Rock_02   |
@@ -878,7 +877,7 @@ Depending on how your asset variants are made, you can chain together variant na
 <a name="asset-name-modifiers"></a>
 ### 4.2 Asset Name Modifiers
 
-When naming an asset use these tables to determine the prefix and suffix to use with an asset's [Base Asset Name](#base-asset-name).
+При нейминге ассета, используйте таблицы для определения префикса и суффикса для использования совместно с [Base Asset Name](#base-asset-name).
 
 #### Sections
 
@@ -907,9 +906,9 @@ When naming an asset use these tables to determine the prefix and suffix to use 
 <a name="anc-common"></a>
 #### Most Common
 
-| Asset Type              | Prefix     | Suffix     | Notes                            |
+| Тип Ассета              | Префикс     | Суффикс     | Примечание                            |
 | ----------------------- | ---------- | ---------- | -------------------------------- |
-| Level / Scene           |  *          |            | [Should be in a folder called Levels.](#levels) e.g. `Levels/A4_C17_Parking_Garage.unity` |
+| Level / Scene           |  *          |            | [Должно располагаться в папке «Уровни».](#levels) e.g. `Levels/A4_C17_Parking_Garage.unity` |
 | Level (Persistent)      |            | _P         |                                  |
 | Level (Audio)           |            | _Audio     |                                  |
 | Level (Lighting)        |            | _Lighting  |                                  |
@@ -919,7 +918,7 @@ When naming an asset use these tables to determine the prefix and suffix to use 
 | Material                | M_         |            |                                  |
 | Static Mesh             | SM_       |            |                                  |
 | Skeletal Mesh           | SK_       |            |                                  |
-| Texture                 | T_         | _?         | See [Textures](#anc-textures)    |
+| Texture                 | T_         | _?         | Смотрите [Textures](#anc-textures)    |
 | Particle System         | PS_       |            |                                  |
 
 <a name="anc-models"></a>
@@ -928,7 +927,7 @@ When naming an asset use these tables to determine the prefix and suffix to use 
 
 PascalCase
 
-| Asset Type    | Prefix | Suffix | Notes |
+| Тип Ассета    | Префикс | Суффикс | Примечание |
 | ------------- | ------ | ------ | ----- |
 | Characters    | CH_    |        |       |
 | Vehicles      | VH_    |        |       |
@@ -940,9 +939,9 @@ PascalCase
 
 #### 4.2.1b 3d Models (3ds Max)
 
-All meshes in 3ds Max are lowercase to differentiate them from their FBX export.
+Названия всех мешей пишутся прописными, чтобы отличить от экспортных FBX.
 
-| Asset Type    | Prefix | Suffix      | Notes                                   |
+| Тип Ассета    | Префикс | Суффикс      | Примечание                                   |
 | ------------- | ------ | ----------- | --------------------------------------- |
 | Mesh          |        | _mesh_lod0* | Only use LOD suffix if model uses LOD's |
 | Mesh Collider |        | _collider   |                                         |
@@ -950,7 +949,7 @@ All meshes in 3ds Max are lowercase to differentiate them from their FBX export.
 <a name="anc-animations"></a>
 
 #### 4.2.2 Animations 
-| Asset Type           | Prefix | Suffix | Notes |
+| Тип Ассета           | Префикс | Суффикс | Примечание |
 | -------------------- | ------ | ------ | ----- |
 | Animation Clip       | A_     |        |       |
 | Animation Controller | AC_    |        |       |
@@ -960,7 +959,7 @@ All meshes in 3ds Max are lowercase to differentiate them from their FBX export.
 <a name="anc-ai"></a>
 #### 4.2.3 Artificial Intelligence
 
-| Asset Type              | Prefix     | Suffix     | Notes                            |
+| Тип Ассета              | Префикс     | Суффикс     | Примечание                            |
 | ----------------------- | ---------- | ---------- | -------------------------------- |
 | AI Controller           | AIC_     |            |                                  |
 | Behavior Tree           | BT_      |            |                                  |
@@ -974,16 +973,16 @@ All meshes in 3ds Max are lowercase to differentiate them from their FBX export.
 <a name="anc-prefab"></a>
 #### 4.2.4 Prefabs
 
-| Asset Type              | Prefix     | Suffix     | Notes                            |
+| Тип Ассета              | Префикс     | Суффикс     | Примечание                            |
 | ----------------------- | ---------- | ---------- | -------------------------------- |
 | Prefab         |        |            |                                  |
 | Prefab Instance         | I       |            |                                  |
-| Scriptable Object       |     |        | Assigned "Blueprint" label in Editor |
+| Scriptable Object       |     |        | Назначить "Blueprint" лейбл в Editor |
 
 <a name="anc-materials"></a>
 
 #### 4.2.5 Materials
-| Asset Type        | Prefix | Suffix | Notes |
+| Тип Ассета        | Префикс | Суффикс | Примечание |
 | ----------------- | ------ | ------ | ----- |
 | Material          | M_     |        |       |
 | Material Instance | MI_    |        |       |
@@ -992,7 +991,7 @@ All meshes in 3ds Max are lowercase to differentiate them from their FBX export.
 <a name="anc-textures"></a>
 
 #### 4.2.6 Textures
-| Asset Type              | Prefix     | Suffix     | Notes                            |
+| Тип Ассета              | Префикс     | Суффикс     | Примечание                            |
 | ----------------------- | ---------- | ---------- | -------------------------------- |
 | Texture                 | T_         |            |                                  |
 | Texture (Diffuse/Albedo/Base Color)| T_ | _D      |                                  |
@@ -1004,7 +1003,7 @@ All meshes in 3ds Max are lowercase to differentiate them from their FBX export.
 | Texture (Emissive)      | T_         | _E         |                                  |
 | Texture (Mask)          | T_         | _M         |                                  |
 | Texture (Specular)      | T_         | _S         |                                  |
-| Texture (Packed)        | T_         | _*         | See notes below about [packing](#anc-textures-packing). |
+| Texture (Packed)        | T_         | _*         | Подробнее об этом ниже - [Упаковка Текстур](#anc-textures-packing). |
 | Texture Cube            | TC_       |            |                                  |
 | Media Texture           | MT_       |            |                                  |
 | Render Target           | RT_       |            |                                  |
@@ -1013,17 +1012,18 @@ All meshes in 3ds Max are lowercase to differentiate them from their FBX export.
 
 <a name="anc-textures-packing"></a>
 
-#### 4.2.6.1 Texture Packing
-It is common practice to pack multiple layers of texture data into one texture. An example of this is packing Emissive, Roughness, Ambient Occlusion together as the Red, Green, and Blue channels of a texture respectively. To determine the suffix, simply stack the given suffix letters from above together, e.g. `_ERO`.
+#### 4.2.6.1 Упаковка Текстур
+Упаковка нескольких текстур в одну многослойную – обычная практика. Например, этот пакет содержит: Emissive, Roughness, Ambient Occlusion вместе, как Red канал, Green канал, и Blue канал, для соответствующих текстур. Для создания суффикса для подобного ассета просто сложите из них аббревиатуру, по типу – `“_ERO“`.
 
-> It is generally acceptable to include an Alpha/Opacity layer in your Diffuse/Albedo's alpha channel and as this is common practice, adding `A` to the `_D` suffix is optional.
+Обычно допустимо включать слой Alpha/Opacity в альфа-канал Diffuse/Albedo, и поскольку это обычная практика, добавление A к суффиксу _D не является обязательным.
 
-Packing 4 channels of data into a texture (RGBA) is not recommended except for an Alpha/Opacity mask in the Diffuse/Albedo's alpha channel as a texture with an alpha channel incurs more overhead than one without.
+Упаковка 4-х каналов в одну (RGBA) текстуру не рекомендуется, если только не присутствует маска Alpha/Opacity в альфа-канале Diffuse/Albedo's поскольку текстура с альфа-каналом требует больше чем текстура без него. 
+
 <a name="anc-misc"></a>
 
-#### 4.2.7 Miscellaneous
+#### 4.2.7 Разнообразные Типы Ассетов
 
-| Asset Type                      | Prefix | Suffix | Notes |
+| Тип Ассета                      | Префикс | Суффикс | Примечание |
 | ------------------------------- | ------ | ------ | ----- |
 | Universal Render Pipeline Asset | URP_   |        |       |
 | Post Process Volume Profile     | PP_    |        |       |
@@ -1032,7 +1032,7 @@ Packing 4 channels of data into a texture (RGBA) is not recommended except for a
 <a name="anc-physics"></a>
 #### 4.2.8 Physics
 
-| Asset Type        | Prefix | Suffix | Notes |
+| Тип Ассета        | Префикс | Суффикс | Примечание |
 | ----------------- | ------ | ------ | ----- |
 | Physical Material | PM_    |        |       |
 
@@ -1040,172 +1040,85 @@ Packing 4 channels of data into a texture (RGBA) is not recommended except for a
 
 #### 4.2.9 Audio
 
-| Asset Type     | Prefix | Suffix | Notes                                                        |
+| Тип Ассета     | Префикс | Суффикс | Notes                                                        |
 | -------------- | ------ | ------ | ------------------------------------------------------------ |
 | Audio Clip     | A_     |        |                                                              |
 | Audio Mixer    | MIX_   |        |                                                              |
 | Dialogue Voice | DV_    |        |                                                              |
-| Audio Class    |        |        | No prefix/suffix. Should be put in a folder called AudioClasses |
+| Audio Class    |        |        | Не используется суффикс и префикс. Должно находится в папке "AudioClasses" |
 
 <a name="anc-ui"></a>
 #### 4.2.10 User Interface
-| Asset Type       | Prefix | Suffix | Notes |
+| Тип Ассета       | Префикс | Суффикс | Примечание |
 | ---------------- | ------ | ------ | ----- |
 | Font             | Font_  |        |       |
 | Texture (Sprite) | T_     | _GUI   |       |
 
 <a name="anc-effects"></a>
 #### 4.2.11 Effects
-| Asset Type      | Prefix | Suffix | Notes |
+| Тип Ассета      | Префикс | Суффикс | Примечание |
 | --------------- | ------ | ------ | ----- |
 | Particle System | PS_    |        |       |
-**[⬆ Back to Top](#table-of-contents)**
+
+4.3 Лейблы
+Поскольку у префабов нет суффикса и префикса, для их упрощённого поиска им назначаются лейблы, разделяющие префабы по группам, группы, к которым относятся соответствующие лейблы отображены в таблице ниже
+
+| Назначение Объекта 	| Лейбл |
+| ---------------- 	| ------ |
+| Транспорт (воздушный, наземный, водный)             | Transport |
+| Военный (постройка, предмет, персонаж, техника)             | Military |
+| Композиция из префабов            | CP |
+| Постройка (здание)             | Building |
+| Объект окружения небольшого размера, исключающий прочие группы             | Environment |
+| Объект, относящийся к земле (разметка, трещина и тп.), исключающий прочие группы           | GroundAsset |
+| Большой объект, относящийся к индустриализации (строительный кран, уличный фонарь, контейнер, дороги, платформы), исключающий прочие группы            | Industrial |
+| Объект природного происхождения (камень, дерево и тп.)             | Nature |
+| Цельный префаб, собранный из префабов (башня из сегментов)             | Complete |
+| Префаб шаблона (Расстановка домов с заборами)            | Template |
+
+**[⬆ Вверх](#table-of-contents)**
 
 <a name="asset-workflows"></a>
 
 ## 5. Asset Workflows
 
-This section describes best practices for creating and importing assets usable in Unity.
+В этом разделе описаны лучшие практики создания и импорта ассетов для использования в Unity.
 
 <a name="toc"></a>
 ### Sections
 
 > 5.1 [Unity Asset Import Settings](#unityimport)
 >
-> 5.2 [3ds Max](#3dsmax)
+> 5.2 [Textures](#textures)
 >
-> 5.3 [Textures](#textures)
->
-> 5.4 [Audio](#audio)
+> 5.3 [Audio](#audio)
 
 <a name="unityimport"></a>
 
-### 5.1 Unity Asset Import Settings
+### 5.1 Настройки Импорта В Unity
 
-Unity's [AssetPostprocessor](https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html) lets you hook into the import pipeline and run scripts prior to or after importing assets. This allows you to enforce import settings when assets are first imported into the project. For example textures that end with `_N` can be marked as a Normal Map on import.
+Unity's [AssetPostprocessor](https://docs.unity3d.com/ScriptReference/AssetPostprocessor.html) позволяет подключаться к конвейеру импорта и запускать скрипты во время или после импорта.
 
-Example guide for Import Settings:
+Это позволяет вам применять настройки импорта при первом импорте ассета в проект. Например, при импорте текстура с суффиксом “_N“, может быть помечена как Normal Map.
+
+Гайд как пример по Import Settings:
 
 https://github.com/justinwasilenko/Unity-AssetPostProcessor
 
-<a name="3dsmax"></a>
-### 5.2 3ds Max
-
-Unity guide on importing from 3ds Max:
-
-https://docs.unity3d.com/2017.4/Documentation/Manual/HOWTO-ImportObjectMax.html
-
-Unity tutorial on the FBX Exporter Package for FBX roundtrip:
-
-https://learn.unity.com/project/3ds-max-to-unity-pipeline
-
-#### Setting up 3ds Max
-
-Unity uses 1 unit = 1 meter. Setup 3ds Max to use Meters by going to ```Customize/Units Setup/System Unit Setup``` and set to 1 Unit = 1 Meter. Using the correct scale is very important for correct Physics / GI / and VR interaction.
-
-Animation frame rate in 3ds Max should be set to 30fps. The ```Time Configuration``` dialog box has 3ds Max's FPS settings
-
-##### Working with Small Objects
-
-* Set ```Customize > Customize User Interface > Mouse Wheel Zoom Increment``` to 0.1m to stop over zooming
-
-* Turn on Viewport Clipping and set the slider on the side of the viewport to be able to zoom in on small meshes. (https://knowledge.autodesk.com/support/3ds-max/learn-explore/caas/sfdcarticles/sfdcarticles/Viewport-Clipping.html)
-
-#### Modeling in 3ds Max
-
-* Follow the [asset naming convention](#anc-models)
-* Avoid super long thin triangles (Speeds up tile based renderers & helps with proper GI baking)
-* Use Area and Angle Weighted Mesh Normals (Unity Import Setting or Create in 3ds Max)
-
-#### Exporting from 3ds Max into Unity
-
-##### Export Settings:
-
-- Triangulate On
-- Tangents and Binormals Off
-- Smoothing Groups On
-- Preserve edge orientation On
-- Units - Automatic Off / Scene Units converted to Meters
-- Axis Conversion Z-up
-
-Models created in 3ds Max use a different coordinate system then Unity. Models need to have their pivot point rotated +90 degrees on the X axis to import into Unity correctly.
-
-To do this quickly, open the MaxScript editor, paste this code and select and drag this code on to a Toolbar in 3ds Max to create a button that will run this script. It applies a Xform modifier to rotate the pivot before exporting.
-
-```
-fn RotateCreationPivot obj rot =
-(
-select obj
-modPanel.addModToSelection (XForm ()) ui:on
-obj.modifiers[#XForm].gizmo.rotation += rot as quat
-rotate obj (inverse rot as quat)
-)
-RotateCreationPivot $ (eulerToQuat(eulerAngles 90 0 0))
-```
-
-
-Script to rotate all objects in 3ds Max scene for export
-
-```
-(
-    mapped fn ProcessObjectsForUnity node =
-    (
-        resetxform node
-        tm = rotatexmatrix 90
-        tm.row4 = node.pos
-        node.transform = tm
-        node.objectoffsetrot = eulerangles -90 0 0
-    )
-    
-    ProcessObjectsForUnity geometry
-)
-```
-
-* Batch Exporter for 3ds Max (http://www.strichnet.com/improving-the-fbx-workflow-between-3ds-max-and-unity3d/)
-
-##### Exporting CAT Animation to FBX
-
-Bind normal bones to the CAT rig for use in skinning and exporting
-
-###### Bind Pose
-
-Set Motion Panel/Layer Manager/"Setup/Animation Mode" Toggle to ```Red```
-Select only the bones and the mesh you wish to export
-Export naming: ModelName.FBX
-
-###### Animation
-
-Set Motion Panel/Layer Manager/"Setup/Animation Mode" to ```Green```
-Select ONLY the bones required in your hierarchy (These should match the exact same bones used for Bind Pose), don't include the mesh.
-Export naming: ModelName@AnimationName.FBX
-The @ symbol is a special Unity naming convention allowing the animation to be bound to the Human.fbx in the Unity editor
-
-#### Importing from 3ds Max into Unity
-
-If importing only animation or bones from a FBX: 
-
-* Set ```Preserve Hierarchy Model``` import option to ```True```
-* Set ```Rig > Avatar Definition``` to ```Copy From Other Avatar```
-
-MaxListener Window, set width and height of selected bones, maybe objects too?
-$.width = 0.01
-$.height = 0.01
-
-**[⬆ Back to Top](#table-of-contents)**
-
 <a name="textures"></a>
-### 5.3 Textures
+### 5.2 Текстуры
 
-* Textures follow the [naming convention](#anc-textures) found above. 
-* They are a power of two (For example, 512 x 512 or 256 x 1024).
-* Use Texture Atlases wherever possible.
-* 3D software should point to the Unity project textures for consistency when you save or export.
-* It is better to resize the texture in Photoshop then to use Unity’s compression options when the in game texture resolution is already known. This reduces the file size and import time of the texture into Unity.
-* When working with a high-resolution source PSD outside your Unity project use the same name for both the high-resolution and the imported Unity file. This allows quick iteration when swapping between the 2 textures.
+* Названия текстур должно следовать  [naming convention](#anc-textures), расположенной выше. 
+* Разрешение текстур – степень двойки (Например: 512 x 512 или 256 x 1024).
+* Используйте атласы текстур где это возможно.
+* При экспорте текстур из 3D программы установите настройки экспорта специально для Unity.
+* Если известно конечное максимальное разрешение текстур в проекте лучше всего изменить разрешение текстур в Photoshop, а после использовать компрессию Unity. Это уменьшит размер импортируемой текстуры в Unity.
+* Когда ведётся работа над PSD высокого разрешения, используйте одинаковые названия для файлов высокого разрешения и готовых для Unity. Такой подход позволяет быстро переключаться между обоими текстурами.
 
-More information for importing textures can be found here: [https://docs.unity3d.com/Manual/ImportingTextures.html](https://docs.unity3d.com/Manual/ImportingTextures.html)
 
-Textures requiring the use of a Alpha channel should follow this guide: [https://docs.unity3d.com/Manual/HOWTO-alphamaps.html](https://docs.unity3d.com/Manual/HOWTO-alphamaps.html)
+Подробнее про импорт текстур: [https://docs.unity3d.com/Manual/ImportingTextures.html](https://docs.unity3d.com/Manual/ImportingTextures.html)
+
+Подробнее про текстуры, требующие (имеющие) альфа канал: [https://docs.unity3d.com/Manual/HOWTO-alphamaps.html](https://docs.unity3d.com/Manual/HOWTO-alphamaps.html)
 
 ##### Texture File Format
 
@@ -1214,13 +1127,13 @@ All textures should be of the .PSD format. No layers should be included and only
 **[⬆ Back to Top](#table-of-contents)**
 
 <a name="audio"></a>
-### 5.4 Audio
+### 5.4 Звук
 
-Only import uncompressed audio files in to Unity using WAV or AIFF formats.
+При импорте в Unity используйте аудиофайлы без компрессии, такого формата как WAV или AIFF.
 
-Great guide on [Unity Audio Import Optimization](https://www.gamasutra.com/blogs/ZanderHulme/20190107/333794/Unity_Audio_Import_Optimisation__getting_more_BAM_for_your_RAM.php)
+Подробнее: [Unity Audio Import Optimization](https://www.gamasutra.com/blogs/ZanderHulme/20190107/333794/Unity_Audio_Import_Optimisation__getting_more_BAM_for_your_RAM.php)
 
-**[⬆ Back to Top](#table-of-contents)**
+**[⬆ Вверх](#table-of-contents)**
 
 
 
