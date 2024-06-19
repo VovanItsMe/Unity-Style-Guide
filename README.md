@@ -649,60 +649,64 @@ int var4 = ExampleClass.ResultSoFar();
 ```
 
 <a name="privatevariables"></a>
-##### Private Variables
-Private variables should have a prefix with a underscore `_myVariable` and use camelCase.
+##### Приватные Переменные
+Приватные переменные должны иметь префикс с нижним подчёркиванием “_myVariable“ и использовать camelCase.
 
-Unless it is known that a variable should only be accessed within the class it is defined and never a child class, do not mark variables as private. Until variables are able to be marked `protected`, reserve private for when you absolutely know you want to restrict child class usage.
+Не помечайте переменную как Private, если не известно, должен ли дочерний класс иметь к ней доступ. До этого времени используйте `protected`, определяя Private, когда будет известно, что дочерний класс не должен иметь к ней доступ.
 
 ##### Do _Not_ use Hungarian notation
-Do _not_ use Hungarian notation or any other type identification in identifiers
+Do _not_ use Hungarian notation или иной вид идентификаторов в идентификаторах
 ```
-// Correct
+// Правильно
 int counter;
 string name;
  
-// Avoid
+// Неправильно
 int iCounter;
 string strName;
 ```
 
-#### Variables accessible in the Editor
+#### Переменные доступные в Editor
 
 ##### Tooltips 
-All [Serializable](#serializable) variables should have a description in their `[Tooltip]` fields that explains how changing this value affects the behavior of the script.
+Все [Serializable](#serializable) переменные должны иметь поля подсказок `[Tooltip]`, которые описывают, какие изменения повлечёт за собой изменение значения переменной.
 
 ##### Variable Slider And Value Ranges
-All [Serializable](#serializable) variables should make use of slider and value ranges if there is ever a value that a variable should _not_ be set to.
+Все [Serializable](#serializable) переменные, должны использовать ползунок с ограниченными значениями, для того, чтобы было *невозможно* установить некорректное значение переменной.
 
-Example: A script that generates fence posts might have an editable variable named `PostsCount` and a value of -1 would not make any sense. Use the range fields `[Range(min, max)]` to mark 0 as a minimum.
+Пример: Скрипт, отвечающий за генерацию секций забора должен иметь изменяемую переменную `PostsCount`, значение которой равное или меньше -1 не должно быть доступным. Используйте диапазон значений `[Range(min, max)]`, с отметкой 0, как минимальное.
 
-If an editable variable is used in a Construction Script, it should have a reasonable Slider Range defined so that someone can not accidentally assign it a large value that could crash the editor.
+Если изменяемая переменная используется в Construction Script, диапазон значений должен быть установлен таким образом, чтобы выставление значений не повлекло за собой краш эдитора.
 
-A Value Range only needs to be defined if the bounds of a value are known. While a Slider Range prevents accidental large number inputs, an undefined Value Range allows a user to specify a value outside the Slider Range that may be considered 'dangerous' but still valid.
+Диапазон значений также необходим для обозначения допустимых пределов переменной. Если установленный диапазон значений помогает задавать “адекватное” значение переменной, то неустановленный диапазон значений позволяет пользователю выставлять “неадекватные” значения, которые, однако, необязательно создадут проблемы.
 
-#### Variable Types
+#### Типы Переменных
 
-##### Booleans
+##### Булевые
 
-###### Boolean Prefix
-All booleans should be named in PascalCase but prefixed with a verb.
+###### Булевые Префиксы
+При нейминге булевых переменных должен использоваться PascalCase, но с префиксом в виде глагола.
 
-Example: Use `isDead` and `hasItem`, **not** `Dead` and `Item`.
+Пример: Используйте `isDead` и `hasItem`, а не `Dead` и `Item`.
 
-###### Boolean Names
-All booleans should be named as descriptive adjectives when possible if representing general information.
+###### Имена Булевых Переменных
+Все переменные типа Boolean следует называть так, чтобы они описывали свои действия.
 
-Try to not use verbs such as `isRunning`. Verbs tend to lead to complex states.
+Старайтесь не использовать глаголы типа `isRunning`. Глаголы должны приводить к конечным состояниям.
 
 ###### Boolean Complex States
-Do not use booleans to represent complex and/or dependent states. This makes state adding and removing complex and no longer easily readable. Use an enumeration instead.
+Не используйте булевые переменные для описания сложных/зависимых состояний. Это делает его трудным для чтения и сложнее при добавлении и. Используйте вместо них enumeration.
 
-Example: When defining a weapon, do **not** use `isReloading` and `isEquipping` if a weapon can't be both reloading and equipping. Define an enumeration named `WeaponState` and use a variable with this type named `WeaponState` instead. This makes it far easier to add new states to weapons.
+Пример: При определении состояния оружия **не** используйте `isReloading` и `isEquipping` если оружие не может быть перезаряжено и экипировано одновременно.
+Определите его с помощью enumeration, как `WeaponState` и вместо этого - используйте переменную этого типа с именем `WeaponState`. Используя такой подход добавить новое состояние для оружия будет проще.
 
 ##### Enums
-Enums use PascalCase and use singular names for enums and their values. Exception: bit field enums should be plural. Enums can be placed outside the class space to provide global access.
+Для енумерации используйте PascalCase а также имена в единственном числе для enums и их значений.
+Исключение: поле для bit enums должно быть во множественном числе.
+Enums могут быть размещены вне пространства класса, для глобального доступа к ним.
 
-Example: 
+Пример:	
+
 ```
 public enum WeaponType
 {
@@ -710,7 +714,7 @@ public enum WeaponType
     Gun
 }
 
-// Enum can have multiple values
+// Enum могут иметь несколько значений
 [Flags]
 public enum Dockings
 {
@@ -721,38 +725,45 @@ public enum Dockings
 public WeaponType Weapon
 ```
 
-##### Arrays
-Arrays follow the same naming rules as above, but should be named as a plural noun.
+##### Массивы
+Нейминг массивов следует правилу, описанному выше – однако он должен называться во множественном числе.
 
-Example: Use `Targets`, `Hats`, and `EnemyPlayers`, not `TargetList`, `HatArray`, `EnemyPlayerArray`.
+Пример: Используй `Targets`, `Hats`, и `EnemyPlayers`, а не `TargetList`, `HatArray`, `EnemyPlayerArray`.
 
-##### Interfaces
-Interfaces are led with a capital `I` then followed with PascalCase.
+##### Интерфейсы
+Интерфейсы начинаются с заглавной `“I“` всё остальное - PascalCase.
 
-Example: ```public interface ICanEat { }```
+Пример:
+
+```public interface ICanEat { }```
 
 <a name="functions"></a>
-### 3.4 Functions, Events, and Event Dispatchers
-This section describes how you should author functions, events, and event dispatchers. Everything that applies to functions also applies to events, unless otherwise noted.
+### 3.4 Функции, События, and Диспетчеры Событий
+В этом разделе описывается, как следует создавать функции, события и диспетчеры событий. Всё, что применимо к функциям, применимо и к событиям, если не указано иное.
 
-#### Function Naming
-The naming of functions, events, and event dispatchers is critically important. Based on the name alone, certain assumptions can be made about functions. For example:
+#### Нейминг Функций
+Именование функций, событий и диспетчеров событий имеет большое значение. Только на основании названия можно понять, за что отвечает.
 
-* Is it a pure function?
-* Is it fetching state information?
-* Is it a handler?
-* What is its purpose?
+Например:
+* Это чистая функция?
+* Это получение информации о состоянии?
+* Это обработчик?
+* Какова цель?
 
-These questions and more can all be answered when functions are named appropriately.
+На все подобные вопросы можно ответить, если функция корректно названа.
 
 <a name="function-verbrule"></a>
-#### All Functions Should Be Verbs
-All functions and events perform some form of action, whether its getting info, calculating data, or causing something to explode. Therefore, all functions should start with verbs. They should be worded in the present tense whenever possible. They should also have some context as to what they are doing.
+#### Название Всех Функций Должно Содержать Глагол 
+Все функции и события совершают какие-либо действия, например: получение информации, вычисления, либо событие или функция заставляет что-то взорваться. Поэтому все функции и события должны содержать глагол. 
 
-Good examples:
+По возможности глагол должен писаться в настоящем времени.
 
-* `Fire` - Good example if in a Character / Weapon class, as it has context. Bad if in a Barrel / Grass / any ambiguous class.
-* `Jump` - Good example if in a Character class, otherwise, needs context.
+Они также должны иметь название, соответствующее их действиям.
+
+Примеры хорошего нейминга:
+
+* `Fire` - Хороший пример в классе персонажа/оружия, поскольку у него есть контекст. Плохо, если в Бочке/Траве/любом подобном неоднозначном классе.
+* `Jump` - Хороший пример в классе персонажа, однако плохо в другом, не столь однозначном классе.
 * `Explode`
 * `ReceiveMessage`
 * `SortPlayerArray`
@@ -760,22 +771,22 @@ Good examples:
 * `GetCoordinates`
 * `UpdateTransforms`
 * `EnableBigHeadMode`
-* `IsEnemy` - ["Is" is a verb.](http://writingexplained.org/is-is-a-verb)
+* `IsEnemy` - ["Is" это глагол.](http://writingexplained.org/is-is-a-verb)
 
-Bad examples:
+Примеры плохого нейминга:
 
-* `Dead` - Is Dead? Will deaden?
+* `Dead` - Это уже мёртво? Будет умерщвлено?
 * `Rock`
-* `ProcessData` - Ambiguous, these words mean nothing.
-* `PlayerState` - Nouns are ambiguous.
-* `Color` - Verb with no context, or ambiguous noun.
+* `ProcessData` - Двусмысленное, мало значащее название.
+* `PlayerState` - Неоднозначное название, только существительные.
+* `Color` - Неоднозначно, может это глагол (покрасить) или существительное (цвет).
 
-#### Functions Returning Bool Should Ask Questions
-When writing a function that does not change the state of or modify any object and is purely for getting information, state, or computing a yes/no value, it should ask a question. This should also follow [the verb rule](#function-verbrule).
+#### Функции Возвращающие Bool Должны Быть Вопросительными
+Когда вы создаёте функцию, которая не изменяет состояние или какой-либо объект, если она создана для получения информации, состояния, или вычисления значения да/нет, её название должно быть вопросительным. Она также следует [правилу глагола](#function-verbrule).
 
-This is extremely important as if a question is not asked, it may be assumed that the function performs an action and is returning whether that action succeeded.
+Это очень важно, потому как, если она не будет вопросительной, можно подумать, что она выполняет действие, результатом которого будет ответ.
 
-Good examples:
+Хорошие примеры:
 
 * `IsDead`
 * `IsOnFire`
@@ -783,21 +794,21 @@ Good examples:
 * `IsSpeaking`
 * `IsHavingAnExistentialCrisis`
 * `IsVisible`
-* `HasWeapon` - ["Has" is a verb.](http://grammar.yourdictionary.com/parts-of-speech/verbs/Helping-Verbs.html)
-* `WasCharging` - ["Was" is past-tense of "be".](http://grammar.yourdictionary.com/parts-of-speech/verbs/Helping-Verbs.html) Use "was" when referring to 'previous frame' or 'previous state'.
-* `CanReload` - ["Can" is a verb.](http://grammar.yourdictionary.com/parts-of-speech/verbs/Helping-Verbs.html)
+* `HasWeapon` - ["Has" это глагол.](http://grammar.yourdictionary.com/parts-of-speech/verbs/Helping-Verbs.html)
+* `WasCharging` - ["Was" это "заряжался" в прошедшем времени.](http://grammar.yourdictionary.com/parts-of-speech/verbs/Helping-Verbs.html) Используйте "was", если относите к 'предыдущему кадру' или 'предыдущему состоянию'.
+* `CanReload` - ["Can" это глагол.](http://grammar.yourdictionary.com/parts-of-speech/verbs/Helping-Verbs.html)
 
-Bad examples:
+Плохие примеры:
 
-* `Fire` - Is on fire? Will fire? Do fire?
-* `OnFire` - Can be confused with event dispatcher for firing.
-* `Dead` - Is dead? Will deaden?
-* `Visibility` - Is visible? Set visibility? A description of flying conditions?
+* `Fire` - Оно горит? Будет гореть? Разжигает огонь?
+* `OnFire` - Можно спутать с диспетчером событий для стрельбы.
+* `Dead` - Это уже мёртво? Будет умерщвлено?
+* `Visibility` - Оно видимо? Изменение видимости? Описание условий полета?
 
-#### Event Handlers and Dispatchers Should Start With `On`
-Any function that handles an event or dispatches an event should start with `On` and continue to follow [the verb rule](#function-verbrule).
+#### Обработчики событий и диспетчеры Должны начинаться с `On`
+Название любой функции, которая обрабатывает или отправляет событие, должна начинаться с `“On”` и продолжать следовать  [правилу глагола](#function-verbrule).
 
-Good examples:
+Хорошие примеры:
 
 * `OnDeath` - Common collocation in games
 * `OnPickup`
