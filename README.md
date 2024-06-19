@@ -17,6 +17,7 @@
 ### Разделы
 
 > 1.1 [Стиль](#style)
+
 > 1.2 [Базовая Терминология](#importantterminology)
 
 <a name="style"></a>
